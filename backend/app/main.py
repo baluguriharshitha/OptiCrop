@@ -2,22 +2,32 @@ from fastapi import FastAPI
 
 app = FastAPI(
     title="OptiCrop API",
-    version="1.0.0",
-    description="Smart Agricultural Production Optimization Engine"
+    version="1.0.0"
 )
 
 
 @app.get("/")
 def home():
+
     return {
-        "message": "Welcome to OptiCrop API",
-        "status": "Running"
+        "Project": "OptiCrop",
+        "Status": "Running",
+        "Version": "1.0.0"
     }
 
 
 @app.get("/health")
 def health():
+
     return {
-        "server": "Healthy",
-        "version": "1.0.0"
+        "Server": "Healthy"
+    }
+
+
+@app.get("/about")
+def about():
+
+    return {
+        "Application":
+        "Smart Agricultural Production Optimization Engine"
     }
