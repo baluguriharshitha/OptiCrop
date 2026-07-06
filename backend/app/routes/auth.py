@@ -1,14 +1,13 @@
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 
 from app.schemas.user import (
     UserRegister,
-    UserLogin
+    UserLogin,
+    UserResponse,
+    Token
 )
 
 from app.services.user_service import (
@@ -16,9 +15,7 @@ from app.services.user_service import (
     authenticate_user
 )
 
-from app.auth.jwt_handler import (
-    create_access_token
-)
+from app.auth.jwt_handler import create_access_token
 
 router = APIRouter(
     prefix="/auth",
@@ -26,7 +23,11 @@ router = APIRouter(
 )
 
 
-@router.post("/register")
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED
+)
 def register(
     request: UserRegister,
     db: Session = Depends(get_db)
@@ -42,15 +43,16 @@ def register(
     if not user:
         raise HTTPException(
             status_code=400,
-            detail="Email already exists"
+            detail="Email already exists."
         )
 
-    return {
-        "message": "Registration Successful"
-    }
+    return user
 
 
-@router.post("/login")
+@router.post(
+    "/login",
+    response_model=Token
+)
 def login(
     request: UserLogin,
     db: Session = Depends(get_db)
@@ -65,12 +67,13 @@ def login(
     if not user:
         raise HTTPException(
             status_code=401,
-            detail="Invalid Credentials"
+            detail="Invalid email or password."
         )
 
     token = create_access_token(
         {
-            "sub": user.email
+            "sub": user.email,
+            "role": user.role
         }
     )
 
