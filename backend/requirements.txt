@@ -1,19 +1,24 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-python-dotenv
-python-jose[cryptography]
-passlib[bcrypt]
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+
+python-dotenv==1.0.1
+
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
-python-multipart
 
-pydantic
-email-validator
+python-multipart==0.0.9
 
-numpy
-pandas
-scikit-learn
-joblib
+pydantic==2.9.2
+pydantic-settings==2.5.2
+email-validator==2.2.0
 
-matplotlib
+numpy==2.1.1
+pandas==2.2.3
+scikit-learn==1.5.2
+joblib==1.4.2
+
+matplotlib==3.9.2
