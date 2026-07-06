@@ -1,5 +1,3 @@
-import pandas as pd
-
 from sklearn.model_selection import train_test_split
 
 from sklearn.ensemble import RandomForestClassifier
@@ -8,16 +6,16 @@ from sklearn.metrics import accuracy_score
 
 import joblib
 
+from pathlib import Path
 
-# Load Dataset
+from app.ml.dataset_loader import load_dataset
 
-dataset = pd.read_csv("dataset/Crop_recommendation.csv")
+from app.ml.preprocess import split_features_target
 
 
-X = dataset.drop("label", axis=1)
+dataset = load_dataset()
 
-y = dataset["label"]
-
+X, y = split_features_target(dataset)
 
 X_train, X_test, y_train, y_test = train_test_split(
 
@@ -31,7 +29,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 )
 
-
 model = RandomForestClassifier(
 
     n_estimators=200,
@@ -39,7 +36,6 @@ model = RandomForestClassifier(
     random_state=42
 
 )
-
 
 model.fit(
 
@@ -49,29 +45,30 @@ model.fit(
 
 )
 
-
 prediction = model.predict(X_test)
 
+print(
 
-accuracy = accuracy_score(
+    "Accuracy:",
 
-    y_test,
+    accuracy_score(
 
-    prediction
+        y_test,
+
+        prediction
+
+    )
 
 )
 
-
-print("Accuracy :", accuracy)
-
+MODEL_PATH = Path(__file__).parent / "crop_model.pkl"
 
 joblib.dump(
 
     model,
 
-    "backend/app/ml/crop_model.pkl"
+    MODEL_PATH
 
 )
 
-
-print("Model Saved Successfully!")
+print("Model Saved")
