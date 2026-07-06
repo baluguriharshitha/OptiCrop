@@ -1,11 +1,19 @@
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-
 from app.auth.password import (
     hash_password,
     verify_password
 )
+
+
+def get_user_by_email(
+    db: Session,
+    email: str
+):
+    return db.query(User).filter(
+        User.email == email
+    ).first()
 
 
 def create_user(
@@ -15,11 +23,7 @@ def create_user(
     password: str
 ):
 
-    existing = db.query(User).filter(
-        User.email == email
-    ).first()
-
-    if existing:
+    if get_user_by_email(db, email):
         return None
 
     user = User(
@@ -29,9 +33,7 @@ def create_user(
     )
 
     db.add(user)
-
     db.commit()
-
     db.refresh(user)
 
     return user
@@ -43,9 +45,10 @@ def authenticate_user(
     password: str
 ):
 
-    user = db.query(User).filter(
-        User.email == email
-    ).first()
+    user = get_user_by_email(
+        db,
+        email
+    )
 
     if not user:
         return None
