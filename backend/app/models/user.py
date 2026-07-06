@@ -1,6 +1,9 @@
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import DateTime
+
+from datetime import datetime
 
 from app.database import Base
 
@@ -15,6 +18,8 @@ class User(Base):
 
     email = Column(String, unique=True, nullable=False)
 
-    password = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=False)
 
     role = Column(String, default="farmer")
+
+    created_at = Column(DateTime, default=datetime.utcnow)
