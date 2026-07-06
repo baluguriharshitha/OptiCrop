@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 
+from app.routes.auth import router as auth_router
+
 app = FastAPI(
     title="OptiCrop API",
     version="1.0.0"
 )
+
+app.include_router(auth_router)
 
 
 @app.get("/")
@@ -11,8 +15,7 @@ def home():
 
     return {
         "Project": "OptiCrop",
-        "Status": "Running",
-        "Version": "1.0.0"
+        "Status": "Running"
     }
 
 
@@ -21,13 +24,4 @@ def health():
 
     return {
         "Server": "Healthy"
-    }
-
-
-@app.get("/about")
-def about():
-
-    return {
-        "Application":
-        "Smart Agricultural Production Optimization Engine"
     }
