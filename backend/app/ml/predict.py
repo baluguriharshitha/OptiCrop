@@ -5,7 +5,7 @@ import joblib
 
 MODEL_PATH = Path(__file__).parent / "crop_model.pkl"
 model = joblib.load(MODEL_PATH)
-)
+
 
 def predict_crop(
 
